@@ -53,6 +53,8 @@ export default function BirthdayCardStudio(){
  const [aiArtwork,setAiArtwork]=useState<string|null>(null);
  const [aiLoading,setAiLoading]=useState(false);
  const [notice,setNotice]=useState("");
+ const draggingRef=useRef(false);
+ const dragPointRef=useRef({x:0,y:0});
  const format=formats.find(x=>x.id===formatId)||formats[0];
  const template=templates.find(x=>x.id===templateId)||templates[0];
 
@@ -88,6 +90,33 @@ export default function BirthdayCardStudio(){
 
  const upload=(file:File|undefined)=>{if(!file||!file.type.startsWith("image/"))return;setPhotoFileName(file.name);const reader=new FileReader();reader.onload=()=>setPhoto(String(reader.result));reader.readAsDataURL(file);};
  const resetPhoto=()=>{setPhoto(null);setPhotoFileName("");setZoom(100);setOffsetX(0);setOffsetY(0);};
+ const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
+ const changeZoom=(amount:number)=>setZoom(v=>clamp(v+amount,100,220));
+ const resetPhotoPosition=()=>{setZoom(100);setOffsetX(0);setOffsetY(0);};
+ const onCanvasPointerDown=(e:React.PointerEvent<HTMLCanvasElement>)=>{
+  if(!photo)return;
+  draggingRef.current=true;
+  dragPointRef.current={x:e.clientX,y:e.clientY};
+  e.currentTarget.setPointerCapture?.(e.pointerId);
+ };
+ const onCanvasPointerMove=(e:React.PointerEvent<HTMLCanvasElement>)=>{
+  if(!draggingRef.current)return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const dx=(e.clientX-dragPointRef.current.x)*(1200/Math.max(1,rect.width));
+  const dy=(e.clientY-dragPointRef.current.y)*(1500/Math.max(1,rect.height));
+  dragPointRef.current={x:e.clientX,y:e.clientY};
+  setOffsetX(v=>clamp(v+dx,-360,360));
+  setOffsetY(v=>clamp(v+dy,-360,360));
+ };
+ const stopCanvasDrag=(e?:React.PointerEvent<HTMLCanvasElement>)=>{
+  draggingRef.current=false;
+  if(e) e.currentTarget.releasePointerCapture?.(e.pointerId);
+ };
+ const onCanvasWheel=(e:React.WheelEvent<HTMLCanvasElement>)=>{
+  if(!photo)return;
+  e.preventDefault();
+  changeZoom(e.deltaY<0?5:-5);
+ };
  const generateArtwork=async()=>{
   const prompt=aiPrompt.trim();if(prompt.length<5){setNotice("Describe the artwork you want first.");return;}
   setAiLoading(true);setNotice("");
@@ -113,12 +142,34 @@ export default function BirthdayCardStudio(){
     <div className="studio-panel"><div className="studio-panel-title"><b>1. Choose a template</b><span>{templates.length} styles</span></div><div className="studio-template-grid">{templates.map(t=><button type="button" key={t.id} className={templateId===t.id?"studio-template active":"studio-template"} onClick={()=>{setTemplateId(t.id);if(aiArtwork)setAiArtwork(null)}}><span className={t.className}>{t.emoji}</span><b>{t.name}</b></button>)}</div></div>
     <div className="studio-panel"><div className="studio-panel-title"><b>2. Add your photo</b><span>Optional</span></div><label className="studio-upload"><input type="file" accept="image/*" onChange={e=>upload(e.target.files?.[0])}/><span>📷</span><div><b>{photoFileName?"Change selected photo":"Choose from Gallery"}</b><small>{photoFileName||"JPG, PNG, WEBP • processed locally in your browser"}</small></div><strong>＋</strong></label>{photo&&<div className="studio-photo-tools"><button type="button" onClick={resetPhoto}>Remove</button><button type="button" onClick={()=>setShowControls(v=>!v)}>{showControls?"Hide":"Edit"} Photo</button></div>}</div>
     <div className="studio-panel"><div className="studio-panel-title"><b>3. Personalize</b><span>Live preview</span></div><label className="studio-field"><span>Recipient name</span><input value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. Priya"/></label><label className="studio-field"><span>Your birthday message</span><textarea value={message} onChange={e=>setMessage(e.target.value)} maxLength={260}/></label><div className="studio-advanced-grid"><label className="studio-field"><span>Font</span><select value={font} onChange={e=>setFont(e.target.value)}>{fonts.map(x=><option key={x}>{x}</option>)}</select></label><label className="studio-field"><span>Font color</span><div className="studio-color-row"><input className="studio-color" type="color" value={textColor} onChange={e=>setTextColor(e.target.value)}/><input className="studio-hex" value={textColor} onChange={e=>/^#[0-9a-fA-F]{0,6}$/.test(e.target.value)&&setTextColor(e.target.value)} maxLength={7}/></div></label><label className="studio-field"><span>Accent color</span><div className="studio-color-row"><input className="studio-color" type="color" value={accentColor} onChange={e=>setAccentColor(e.target.value)}/><input className="studio-hex" value={accentColor} onChange={e=>/^#[0-9a-fA-F]{0,6}$/.test(e.target.value)&&setAccentColor(e.target.value)} maxLength={7}/></div></label><label className="studio-field"><span>Overlay</span><input type="range" min="0" max="45" value={overlay} onChange={e=>setOverlay(Number(e.target.value))}/></label></div></div>
-    <div className="studio-ai-panel"><div><span className="eyebrow">✦ WISHORA AI ARTWORK</span><b>Generate a custom birthday background</b><small>Describe the vibe, colors, scene or theme. AI creates a clean card artwork with space for your text.</small></div><textarea value={aiPrompt} onChange={e=>setAiPrompt(e.target.value)} maxLength={700} placeholder="e.g. Luxury midnight birthday, deep purple and gold, elegant stars, subtle balloons, cinematic glow, premium and minimal"/><div className="studio-ai-actions"><button type="button" onClick={generateArtwork} disabled={aiLoading}>{aiLoading?"Generating artwork…":"Generate AI Artwork ✨"}</button>{aiArtwork&&<button type="button" className="studio-ai-clear" onClick={clearAi}>Use template instead</button>}</div><small className="studio-ai-foot">{aiArtwork?"AI artwork is active in the preview. Generate again anytime.":"Your prompt is sent to BirthdayWishora's Supabase Edge Function; the OpenAI key stays server-side."}</small></div>
+    <div className="studio-ai-panel"><div><span className="eyebrow">✦ WISHORA AI ARTWORK</span><b>Generate a custom birthday background</b><small>Describe the vibe, colors, scene or theme. AI creates a clean card artwork with space for your text.</small></div><textarea value={aiPrompt} onChange={e=>setAiPrompt(e.target.value)} maxLength={700} placeholder="e.g. Luxury midnight birthday, deep purple and gold, elegant stars, subtle balloons, cinematic glow, premium and minimal"/><div className="studio-ai-actions"><button type="button" onClick={generateArtwork} disabled={aiLoading}>{aiLoading?"Generating artwork…":"Generate AI Artwork ✨"}</button>{aiArtwork&&<button type="button" className="studio-ai-clear" onClick={clearAi}>Use template instead</button>}</div><small className="studio-ai-foot">{aiArtwork?"AI artwork is active in the preview. Generate again anytime.":"Your prompt is sent to BirthdayWishora's secure Supabase Edge Function; the AI key stays server-side."}</small></div>
     {photo&&showControls&&<div className="studio-panel studio-photo-editor"><div className="studio-panel-title"><b>Photo positioning</b><span>Live crop</span></div><label className="studio-range"><span>Zoom <b>{zoom}%</b></span><input type="range" min="100" max="180" value={zoom} onChange={e=>setZoom(Number(e.target.value))}/></label><label className="studio-range"><span>Horizontal <b>{offsetX}</b></span><input type="range" min="-180" max="180" value={offsetX} onChange={e=>setOffsetX(Number(e.target.value))}/></label><label className="studio-range"><span>Vertical <b>{offsetY}</b></span><input type="range" min="-180" max="180" value={offsetY} onChange={e=>setOffsetY(Number(e.target.value))}/></label><div className="studio-frame-row">{frameStyles.map(x=><button type="button" key={x} className={frame===x?"active":""} onClick={()=>setFrame(x)}>{x==="rounded"?"▢":x==="soft"?"▣":"◯"} {x}</button>)}</div></div>}
     <div className="studio-smart"><div><span className="eyebrow">✦ SMART DESIGN</span><b>Instantly refresh the look</b><small>Try a different premium background and accent pairing without changing your content.</small></div><button type="button" onClick={()=>{const next=templates[(templates.findIndex(t=>t.id===templateId)+1)%templates.length];setTemplateId(next.id);setAccentColor(next.colors[2]);setAiArtwork(null);}}>Generate New Look ✨</button></div>
     <div className="studio-actions"><button type="button" className="studio-download" onClick={download}>↓ Download Image</button><button type="button" className="studio-share" onClick={share}>↗ Share</button></div>{notice&&<p className="studio-notice">{notice}</p>}
    </div>
-   <div className="studio-preview"><div className="studio-preview-head"><span>{aiArtwork?"AI ARTWORK • LIVE PREVIEW":"LIVE PREVIEW"}</span><small>{format.width} × {format.height}px</small></div><div className={"studio-canvas-wrap format-"+formatId}><canvas ref={canvasRef}/></div><div className="studio-preview-actions"><button type="button" onClick={()=>{setAiArtwork(null);setTemplateId(templates[(templates.findIndex(t=>t.id===templateId)+1)%templates.length].id)}}>Shuffle template ↻</button><span>High-resolution PNG</span></div><small className="studio-preview-note">Your selected photo is processed locally in your browser. It is not uploaded by this editor. AI artwork is generated by the secure Supabase Edge Function.</small></div>
+   <div className="studio-preview"><div className="studio-preview-head"><span>{aiArtwork?"AI ARTWORK • LIVE PREVIEW":"LIVE PREVIEW"}</span><small>{format.width} × {format.height}px</small></div><div className={"studio-canvas-wrap format-"+formatId}>
+    <div className="studio-canvas-stage">
+      <canvas
+        ref={canvasRef}
+        onPointerDown={onCanvasPointerDown}
+        onPointerMove={onCanvasPointerMove}
+        onPointerUp={stopCanvasDrag}
+        onPointerCancel={stopCanvasDrag}
+        onWheel={onCanvasWheel}
+      />
+      {photo&&<div className="studio-canvas-tools" aria-label="Photo controls">
+        <button type="button" onClick={()=>changeZoom(-10)} aria-label="Zoom out">−</button>
+        <span>{zoom}%</span>
+        <button type="button" onClick={()=>changeZoom(10)} aria-label="Zoom in">+</button>
+        <button type="button" onClick={()=>setOffsetY(v=>clamp(v-20,-360,360))} aria-label="Move photo up">↑</button>
+        <button type="button" onClick={()=>setOffsetY(v=>clamp(v+20,-360,360))} aria-label="Move photo down">↓</button>
+        <button type="button" onClick={()=>setOffsetX(v=>clamp(v-20,-360,360))} aria-label="Move photo left">←</button>
+        <button type="button" onClick={()=>setOffsetX(v=>clamp(v+20,-360,360))} aria-label="Move photo right">→</button>
+        <button type="button" onClick={resetPhotoPosition} aria-label="Reset photo position">Reset</button>
+      </div>}
+      {photo&&<div className="studio-canvas-hint">Drag photo • Scroll to zoom</div>}
+    </div>
+  </div><div className="studio-preview-actions"><button type="button" onClick={()=>{setAiArtwork(null);setTemplateId(templates[(templates.findIndex(t=>t.id===templateId)+1)%templates.length].id)}}>Shuffle template ↻</button><span>High-resolution PNG</span></div><small className="studio-preview-note">Your selected photo is processed locally in your browser. It is not uploaded by this editor. AI artwork is generated by the secure Supabase Edge Function.</small></div>
   </div>
  </section>;
 }
