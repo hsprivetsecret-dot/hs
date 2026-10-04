@@ -1,5 +1,6 @@
 import Link from "next/link";
 import WishGenerator from "@/components/wish-generator";
+import {FAQSection,JsonLd} from "@/components/seo";
 
 const relationships = [
   ["Mom","/wishes/mom","💐","Warm, loving & heartfelt"],
@@ -31,6 +32,7 @@ const seoLinks = [
   ["Birthday Wishes for Son","/wishes/son"],
 ];
 
+const homeFaqs=[{q:"Where can I find birthday wishes for different relationships?",a:"BirthdayWishora has dedicated birthday-wish pages for Mom, Dad, siblings, partners, best friends, colleagues, children, teachers and someone special."},{q:"Can I personalize a birthday message?",a:"Yes. Wishora AI lets you choose the relationship, style, language, name, age and a personal memory."},{q:"Can I create a birthday card with my own photo?",a:"Yes. Birthday Card Studio lets you upload a gallery photo, position it, customize text and export a shareable card."},{q:"Which languages are supported?",a:"BirthdayWishora currently offers English, Hindi, Hinglish, Spanish, French, German, Arabic and Portuguese discovery routes."}];
 export default function Home() {
   return <main className="page">
     <nav className="nav">
@@ -104,7 +106,7 @@ export default function Home() {
       <div className="seo-grid">{seoLinks.map(([label,href])=><Link key={href} href={href}>{label}<span>→</span></Link>)}</div>
     </section>
 
-    <section className="final-cta">
+    <FAQSection items={homeFaqs} />\n    <JsonLd data={{"@context":"https://schema.org","@type":"WebPage",name:"BirthdayWishora Birthday Wishes",description:"Personalized birthday wishes and cards for everyone."}} />\n\n    <section className="final-cta">
       <span className="eyebrow">YOUR NEXT BIRTHDAY DESERVES BETTER WORDS</span>
       <h2>Make their day unforgettable.</h2>
       <p>Personal, beautiful and ready to share in seconds.</p>
