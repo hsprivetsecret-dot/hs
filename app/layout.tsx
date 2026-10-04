@@ -1,39 +1,6 @@
-import type { Metadata } from "next";
+import type {Metadata} from "next";
 import "./globals.css";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-
-export const metadata: Metadata = {
-  metadataBase: siteUrl ? new URL(siteUrl) : undefined,
-  title: {
-    default: "BirthdayWishora — Birthday Wishes & Personalized Messages",
-    template: "%s | BirthdayWishora",
-  },
-  description: "BirthdayWishora helps you find, personalize and share the perfect birthday wish for anyone, anywhere in the world.",
-  authors: [{ name: "Satpal Swami" }],
-  creator: "Satpal Swami",
-  publisher: "BirthdayWishora",
-  keywords: ["birthday wishes", "happy birthday wishes", "birthday messages", "birthday wishes for mom", "funny birthday wishes", "romantic birthday wishes", "personalized birthday wishes"],
-  alternates: siteUrl ? { canonical: siteUrl } : undefined,
-  openGraph: {
-    title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
-    description: "Find, personalize and share the perfect birthday message.",
-    type: "website",
-    siteName: "BirthdayWishora",
-    url: siteUrl,
-  },
-  icons: {
-    icon: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
-    shortcut: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
-    apple: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
-    description: "Find, personalize and share the perfect birthday message.",
-  },
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body>{children}</body></html>;
-}
+import {JsonLd,organizationSchema,websiteSchema} from "@/components/seo";
+const siteUrl=process.env.NEXT_PUBLIC_SITE_URL;
+export const metadata:Metadata={metadataBase:siteUrl?new URL(siteUrl):undefined,title:{default:"BirthdayWishora — Birthday Wishes, Cards & Personalized Messages",template:"%s | BirthdayWishora"},description:"Find, personalize and share birthday wishes for Mom, Dad, friends, partners, colleagues and more. Create heartfelt messages and beautiful birthday cards in seconds.",authors:[{name:"Satpal Swami"}],creator:"Satpal Swami",publisher:"BirthdayWishora",keywords:["birthday wishes","happy birthday wishes","birthday messages","birthday cards","personalized birthday wishes","birthday wishes for mom","birthday wishes for dad","funny birthday wishes","romantic birthday wishes","emotional birthday wishes"],alternates:siteUrl?{canonical:siteUrl}:undefined,robots:{index:true,follow:true,"max-image-preview":"large","max-snippet":-1,"max-video-preview":-1},openGraph:{title:"BirthdayWishora — Birthday Wishes, Cards & Personalized Messages",description:"Create the perfect birthday message and card for anyone, anywhere.",type:"website",siteName:"BirthdayWishora",url:siteUrl},twitter:{card:"summary_large_image",title:"BirthdayWishora — Birthday Wishes & Personalized Messages",description:"Create the perfect birthday message and card in seconds."},icons:{icon:siteUrl?siteUrl+"/icon.svg":"/icon.svg",shortcut:siteUrl?siteUrl+"/icon.svg":"/icon.svg",apple:siteUrl?siteUrl+"/icon.svg":"/icon.svg"}};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><JsonLd data={[organizationSchema,websiteSchema]}/>{children}</body></html>;}
