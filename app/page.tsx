@@ -115,8 +115,8 @@ export default function Home() {
       <div className="footer-brand"><Link className="logo" href="/"><span className="logo-mark">✦</span> BirthdayWishora</Link><p>Make Every Birthday Unforgettable.</p><small>Personal birthday wishes, cards and greetings for people everywhere.</small></div>
       <div><b className="footer-title">Explore</b><div className="footer-links"><Link href="/wishes">Wish Library</Link><Link href="/cards">Birthday Cards</Link><Link href="/about">About</Link></div></div>
       <div><b className="footer-title">Popular</b><div className="footer-links"><Link href="/wishes/mom">For Mom</Link><Link href="/wishes/dad">For Dad</Link><Link href="/wishes/partner/romantic">Romantic</Link><Link href="/wishes/best-friend/funny">Funny</Link></div></div>
-      <div><b className="footer-title">Company</b><div className="footer-links"><Link href="/contact">Contact</Link><Link href="/about">Our Story</Link></div></div>
-      <div className="footer-bottom">© {new Date().getFullYear()} BirthdayWishora. Made for moments that matter. <span>♥</span></div>
+      <div><b className="footer-title">Company</b><div className="footer-links"><Link href="/contact">Contact</Link><Link href="/about">Our Story</Link><a href="mailto:satpalswami22742@gmail.com">Email us</a></div></div>
+      <div className="footer-bottom">© {new Date().getFullYear()} BirthdayWishora. Made for moments that matter. Created by Satpal Swami. <span>♥</span></div>
     </footer>
   </main>;
 }
