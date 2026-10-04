@@ -3,8 +3,8 @@ import BirthdaySurprise from "@/components/birthday-surprise";
 import {SiteFooter,SiteHeader} from "@/components/site-shell";
 
 export const metadata={
-  title:"Create a Birthday Surprise",
-  description:"Create a personalized birthday surprise with a secret message, surprise plan, gift idea and fun reveal.",
+  title:"Premium Birthday Surprise | Free to Create",
+  description:"Create a premium-feeling personalized birthday surprise for free — with a secret message, thoughtful plan, gift idea and fun reveal.",
 };
 
 export default function SurprisePage(){
@@ -13,10 +13,10 @@ export default function SurprisePage(){
     <section className="surprise-hero">
       <div className="surprise-hero-glow"/>
       <div className="surprise-hero-inner">
-        <span className="eyebrow">✦ BIRTHDAY SURPRISE</span>
+        <span className="eyebrow">✦ PREMIUM BIRTHDAY SURPRISE</span>
         <h1>Create a birthday moment<br/><span>they won’t forget.</span></h1>
-        <p>Turn a few simple details into a personal surprise experience — with a reveal message, thoughtful plan, gift idea and a little fun.</p>
-        <div className="surprise-trust"><span>✦ Personalized</span><span>✦ Free to create</span><span>✦ Easy to share</span></div>
+        <p>Turn a few simple details into a premium-feeling surprise experience — completely free, with a reveal message, thoughtful plan, gift idea and a little fun.</p>
+        <div className="surprise-trust"><span>✦ Premium experience</span><span>✦ 100% Free</span><span>✦ Easy to create</span></div>
       </div>
     </section>
     <BirthdaySurprise/>
