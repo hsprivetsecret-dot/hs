@@ -75,11 +75,11 @@ export default function Home() {
 
     <section className="surprise-home-section">
       <div className="surprise-home-copy">
-        <span className="eyebrow">✦ CREATE A BIRTHDAY SURPRISE</span>
+        <span className="eyebrow">✦ PREMIUM BIRTHDAY SURPRISE · FREE</span>
         <h2>Don’t just send a wish.<br/><span>Create a moment.</span></h2>
-        <p>Build a personalized birthday surprise with a secret message, thoughtful 3-step plan, gift idea and a fun reveal — all in one polished experience.</p>
+        <p>Build a premium-feeling birthday surprise for free, with a secret message, thoughtful 3-step plan, gift idea and a fun reveal — all in one polished experience.</p>
         <div className="surprise-home-points"><span>🔐 Secret message reveal</span><span>🎁 Personalized surprise plan</span><span>🧠 Mini birthday game</span></div>
-        <Link className="hero-button inline-button" href="/surprise">Create a Birthday Surprise →</Link>
+        <Link className="hero-button inline-button" href="/surprise">Create Your Free Surprise →</Link>
       </div>
       <div className="surprise-home-visual">
         <div className="surprise-orbit orbit-a"/><div className="surprise-orbit orbit-b"/>
