@@ -10,6 +10,17 @@ export default function WishGenerator(){
   async function generate(){
     setLoading(true);setError("");const supabase=createClient();
     try{
+      const selectedCategory=categories.find(([v])=>v===category)?.[1]??category;
+      const selectedStyle=styles.find(([v])=>v===style)?.[1]??style;
+      const selectedLanguage=[["en","English"],["hi","Hindi"],["hinglish","Hinglish"],["es","Spanish"],["fr","French"],["de","German"],["ar","Arabic"],["pt","Portuguese"]].find(([v])=>v===language)?.[1]??"English";
+      try{
+        const ai=await fetch("/api/generate-wish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,age,memory,relationship:selectedCategory,style:selectedStyle,language:selectedLanguage,categorySlug:category,styleSlug:style,languageCode:language})});
+        if(ai.ok){
+          const generated=await ai.json();
+          setResult({id:0,title:generated.title,content:generated.content});
+          return;
+        }
+      }catch{}
       const [{data:cr},{data:sr},{data:lr}]=await Promise.all([
         supabase.from("wish_categories").select("id").eq("slug",category).single(),
         supabase.from("wish_styles").select("id").eq("slug",style).single(),
