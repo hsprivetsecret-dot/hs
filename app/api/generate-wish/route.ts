@@ -20,7 +20,7 @@ export async function POST(request:Request){
     ].filter(Boolean).join(" ");
     const response=await fetch("https://api.openai.com/v1/responses",{
       method:"POST",
-      headers:{"Content-Type":"application/json","Authorization:`Bearer ${process.env.OPENAI_API_KEY}`},
+      headers:{"Content-Type":"application/json","Authorization":`Bearer ${process.env.OPENAI_API_KEY}`},
       body:JSON.stringify({model:process.env.OPENAI_MODEL??"gpt-5.6",input:prompt,store:false})
     });
     if(!response.ok)return NextResponse.json({error:"AI provider error"},{status:502});
