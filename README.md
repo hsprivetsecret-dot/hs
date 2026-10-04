@@ -1,17 +1,34 @@
-# Birthday Wishes Platform
+# Wishly — Birthday Wishes Platform
 
-Global birthday wishes and personalized greeting platform.
+Global birthday wishes and personalized greeting platform built with Next.js and Supabase.
+
+## Current product
+- Birthday wishes by relationship and style
+- SEO pages for `/wishes/[category]` and `/wishes/[category]/[style]`
+- Personalized generator fields: name, age, language and personal memory
+- Copy + WhatsApp + Facebook + X + Email sharing
+- Supabase-backed content taxonomy and wishes
+- Dynamic sitemap and robots metadata
+- Mobile-friendly responsive UI
 
 ## Stack
-- Next.js + TypeScript
+- Next.js App Router + TypeScript
 - Supabase
 - GitHub
+- Ready for Vercel deployment
 
 ## Local setup
-1. Copy .env.example to .env.local.
-2. Add the Supabase project URL and publishable key.
-3. Install dependencies with npm install.
-4. Run npm run dev.
+1. Copy `.env.example` to `.env.local`.
+2. Set the Supabase publishable key.
+3. Set `NEXT_PUBLIC_SITE_URL` to the local or production origin.
+4. Install dependencies with `npm install`.
+5. Run `npm run dev`.
 
-## Planned modules
-Wishes, AI personalization, multilingual content, greeting cards, sharing, accounts and analytics.
+## Production
+Connect this repository to Vercel and add the same environment variables in the project settings. The custom domain can be connected later.
+
+## Content
+The database contains relationship and style taxonomies plus English starter wishes. `supabase/seed.sql` contains reproducible content inserts for new environments.
+
+## Next phase
+AI-generated original wishes, multilingual expansion, greeting-card templates, authentication/saved wishes, analytics and monetization.
