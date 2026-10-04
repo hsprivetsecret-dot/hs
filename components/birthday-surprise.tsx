@@ -65,8 +65,8 @@ export default function BirthdaySurprise(){
 
   return <section className="surprise-builder">
     <div className="surprise-intro">
-      <div><span className="eyebrow">CREATE YOUR SURPRISE</span><h2>Make it personal.</h2><p>Tell us a little about the person. BirthdayWishora will shape a polished surprise plan around them.</p></div>
-      <span className="surprise-badge">No account needed</span>
+      <div><span className="eyebrow">✦ PREMIUM BIRTHDAY SURPRISE</span><h2>Make it personal.</h2><p>Tell us a little about the person. BirthdayWishora will shape a polished surprise plan around them.</p></div>
+      <span className="surprise-badge">FREE • No payment required</span>
     </div>
 
     <div className="surprise-layout">
@@ -76,7 +76,7 @@ export default function BirthdaySurprise(){
         <label><span>Surprise mood</span><div className="surprise-vibes">{vibes.map(x=><button type="button" key={x} className={vibe===x?"active":""} onClick={()=>setVibe(x)}>{x}</button>)}</div></label>
         <label><span>One detail to make it theirs <small>(optional)</small></span><textarea value={detail} onChange={e=>setDetail(e.target.value)} placeholder="An inside joke, favourite thing, shared memory..."/></label>
         <label><span>Birthday date <small>(optional)</small></span><input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label>
-        <button className="surprise-create" type="button" onClick={()=>setCreated(true)}>Create My Birthday Surprise <span>→</span></button>
+        <button className="surprise-create" type="button" onClick={()=>setCreated(true)}>Create My Free Birthday Surprise <span>→</span></button>
       </div>
 
       <div className={"surprise-result "+(created?"is-created":"")}>
