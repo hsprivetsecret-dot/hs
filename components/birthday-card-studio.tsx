@@ -18,17 +18,17 @@ const templates=[
  {id:"pastel",name:"Sweet Pastel",className:"studio-template-pastel",emoji:"🌷"},
 ];
 
-function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-function fitImage(ctx,img,x,y,w,h){const scale=Math.max(w/img.width,h/img.height),nw=img.width*scale,nh=img.height*scale;ctx.drawImage(img,x+(w-nw)/2,y+(h-nh)/2,nw,nh);}
-function wrap(ctx,text,cx,startY,maxWidth,lineHeight,maxLines){const words=text.split(/\s+/);let line="",y=startY,lines=0;for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,cx,y);line=word;y+=lineHeight;lines++;if(lines>=maxLines)break;}else line=test;}if(lines<maxLines&&line)ctx.fillText(line,cx,y);}
+function roundRect(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number,r:number){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function fitImage(ctx:CanvasRenderingContext2D,img:HTMLImageElement,x:number,y:number,w:number,h:number){const scale=Math.max(w/img.width,h/img.height),nw=img.width*scale,nh=img.height*scale;ctx.drawImage(img,x+(w-nw)/2,y+(h-nh)/2,nw,nh);}
+function wrap(ctx:CanvasRenderingContext2D,text:string,cx:number,startY:number,maxWidth:number,lineHeight:number,maxLines:number){const words=text.split(/\s+/);let line="",y=startY,lines=0;for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,cx,y);line=word;y+=lineHeight;lines++;if(lines>=maxLines)break;}else line=test;}if(lines<maxLines&&line)ctx.fillText(line,cx,y);}
 
 export default function BirthdayCardStudio(){
- const canvasRef=useRef(null);
+ const canvasRef=useRef<HTMLCanvasElement|null>(null);
  const [formatId,setFormatId]=useState("card");
  const [templateId,setTemplateId]=useState("bloom");
  const [name,setName]=useState("");
  const [message,setMessage]=useState("Wishing you a beautiful birthday filled with happiness, love and unforgettable moments.");
- const [photo,setPhoto]=useState(null);
+ const [photo,setPhoto]=useState<string|null>(null);
  const [photoFileName,setPhotoFileName]=useState("");
  const [notice,setNotice]=useState("");
  const format=formats.find(x=>x.id===formatId)||formats[0];
@@ -37,7 +37,7 @@ export default function BirthdayCardStudio(){
  const draw=()=>{
   const canvas=canvasRef.current;if(!canvas)return;canvas.width=format.width;canvas.height=format.height;
   const ctx=canvas.getContext("2d");if(!ctx)return;const W=canvas.width,H=canvas.height;
-  const palettes={bloom:["#efe6d2","#f5b6c7","#6f4b77"],midnight:["#171522","#55416a","#e8d5ff"],confetti:["#ffd6e8","#f7a5b9","#f29b38"],love:["#f5d4e8","#c96b9f","#7a315e"],gold:["#f3dfb1","#c99545","#5b3b19"],pastel:["#d9e8dc","#e9b9c8","#6d668d"]};
+  const palettes:Record<string,string[]>={bloom:["#efe6d2","#f5b6c7","#6f4b77"],midnight:["#171522","#55416a","#e8d5ff"],confetti:["#ffd6e8","#f7a5b9","#f29b38"],love:["#f5d4e8","#c96b9f","#7a315e"],gold:["#f3dfb1","#c99545","#5b3b19"],pastel:["#d9e8dc","#e9b9c8","#6d668d"]};
   const p=palettes[templateId]||palettes.bloom;const grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,p[0]);grad.addColorStop(.55,p[1]);grad.addColorStop(1,p[2]);ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
   ctx.fillStyle="rgba(255,255,255,.16)";for(let i=0;i<12;i++){ctx.beginPath();ctx.arc((i*137)%W,(i*211)%H,35+(i%4)*18,0,Math.PI*2);ctx.fill();}
   const photoBox=format.id==="digital"?{x:W*.53,y:H*.12,w:W*.38,h:H*.58}:format.id==="story"||format.id==="whatsapp"?{x:W*.10,y:H*.11,w:W*.80,h:H*.43}:format.id==="share"?{x:W*.09,y:H*.08,w:W*.82,h:H*.45}:{x:W*.10,y:H*.08,w:W*.80,h:H*.43};
@@ -53,11 +53,11 @@ export default function BirthdayCardStudio(){
  };
  useEffect(()=>{draw();},[formatId,templateId,name,message,photo]);
 
- const upload=(file)=>{
+ const upload=(file:File|undefined)=>{
   if(!file||!file.type.startsWith("image/"))return;setPhotoFileName(file.name);const reader=new FileReader();reader.onload=()=>setPhoto(String(reader.result));reader.readAsDataURL(file);
  };
  const download=()=>{const c=canvasRef.current;if(!c)return;const a=document.createElement("a");a.download="birthdaywishora-"+formatId+".png";a.href=c.toDataURL("image/png");a.click();setNotice("Your birthday image is ready.");};
- const share=async()=>{const c=canvasRef.current;if(!c)return;try{const blob=await new Promise(r=>c.toBlob(r,"image/png"));if(!blob)return;const file=new File([blob],"birthdaywishora-"+formatId+".png",{type:"image/png"});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({title:"BirthdayWishora",text:"A birthday greeting made with BirthdayWishora.",files:[file]});else if(navigator.share)await navigator.share({title:"BirthdayWishora",text:"A birthday greeting made with BirthdayWishora.",url:location.href});else download();}catch(e){if(e.name!=="AbortError")setNotice("Sharing is not available here. Use Download instead.");}};
+ const share=async()=>{const c=canvasRef.current;if(!c)return;try{const blob=await new Promise<Blob|null>(r=>c.toBlob(r,"image/png"));if(!blob)return;const file=new File([blob],"birthdaywishora-"+formatId+".png",{type:"image/png"});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({title:"BirthdayWishora",text:"A birthday greeting made with BirthdayWishora.",files:[file]});else if(navigator.share)await navigator.share({title:"BirthdayWishora",text:"A birthday greeting made with BirthdayWishora.",url:location.href});else download();}catch(e){if(e instanceof Error&&e.name!=="AbortError")setNotice("Sharing is not available here. Use Download instead.");}};
 
  return <section className="studio-builder" id="card-generator">
   <div className="studio-builder-head"><div><span className="eyebrow">✦ CREATE YOUR VISUAL GREETING</span><h2>Birthday Card Studio</h2><p>Choose a format, add your own gallery photo, personalize the message and generate a ready-to-share image.</p></div><span className="studio-badge">Browser-generated • No upload required</span></div>
