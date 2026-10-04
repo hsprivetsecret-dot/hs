@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_SUPABASE_URL: https://knubboezqqmstkdcunyi.supabase.co
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_x6Jn5qBDFzp5fUEAiFZQNw_Zyfom8Mn
       NEXT_PUBLIC_SITE_URL: https://hsprivetsecret-dot.github.io/hs
       GITHUB_ACTIONS: true
     steps:
@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Install dependencies
         run: npm install
       - name: Build static site
