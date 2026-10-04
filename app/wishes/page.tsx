@@ -1,0 +1,1 @@
+export default function Wishes(){return <main style={{padding:40,fontFamily:"Arial"}}><h1>Birthday Wishes</h1><p>Categories and SEO landing pages will be connected to Supabase content here.</p><a href="/">← Home</a></main>}
