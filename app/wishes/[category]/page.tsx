@@ -2,7 +2,6 @@ import Link from "next/link";
 import {notFound} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ShareButtons from "@/components/share-buttons";
-export const revalidate=300;
 export async function generateStaticParams(){const s=await createClient();const {data}=await s.from("wish_categories").select("slug").eq("is_active",true);return(data??[]).map(x=>({category:x.slug}));}
 export async function generateMetadata({params}:{params:Promise<{category:string}>}){const {category}=await params;const s=await createClient();const {data}=await s.from("wish_categories").select("name").eq("slug",category).eq("is_active",true).maybeSingle();if(!data)return{};return{title:`Birthday Wishes for ${data.name}`,description:`Beautiful birthday wishes for ${data.name.toLowerCase()}. Find sweet, funny, emotional, romantic and short messages to copy and share.`};}
 export default async function CategoryPage({params}:{params:Promise<{category:string}>}){
