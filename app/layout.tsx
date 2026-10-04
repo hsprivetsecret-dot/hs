@@ -17,8 +17,13 @@ export const metadata: Metadata = {
     description: "Find, personalize and share the perfect birthday message.",
     type: "website",
     siteName: "BirthdayWishora",
+    url: siteUrl,
   },
-  icons: { icon: "/icon.svg", shortcut: "/icon.svg", apple: "/icon.svg" },
+  icons: {
+    icon: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
+    shortcut: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
+    apple: siteUrl ? `${siteUrl}/icon.svg` : "/icon.svg",
+  },
   twitter: {
     card: "summary_large_image",
     title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
