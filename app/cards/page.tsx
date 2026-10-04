@@ -1,23 +1,3 @@
-import Link from "next/link";
-
-const cards = [
-  ["Elegant Bloom","Soft, elegant and perfect for Mom, Dad or someone special.","💐"],
-  ["Midnight Celebration","A premium dark celebration look for a bold birthday message.","✨"],
-  ["Happy Confetti","Bright, playful and ready for best friends and family.","🎉"],
-  ["Love Note","Warm, romantic and made for a partner or someone special.","💖"],
-];
-
-export default function CardsPage() {
-  return <main className="page">
-    <nav className="nav"><Link className="logo" href="/"><span className="logo-mark">✦</span> BirthdayWishora</Link><div className="nav-links"><Link href="/wishes">Explore Wishes</Link><Link className="nav-cta" href="/#generator">Create Wish</Link></div></nav>
-    <section className="hero" style={{paddingBottom:60}}>
-      <div className="hero-content"><div className="badge">✦ Birthday Card Studio</div><h1>Beautiful cards.<br/><span>Meaningful words.</span></h1><p>Choose a premium visual style, pair it with the perfect birthday wish, and share a moment worth remembering.</p></div>
-    </section>
-    <section className="category-section">
-      <div className="section-heading"><div><span className="eyebrow">CARD COLLECTION</span><h2>Made for every kind of celebration</h2></div><Link href="/wishes">Find a wish →</Link></div>
-      <div className="category-grid">{cards.map(([title,desc,icon])=><article className="category-card" key={title} style={{alignItems:"flex-start",minHeight:190}}><span className="category-icon">{icon}</span><span><b>{title}</b><small style={{lineHeight:1.55}}>{desc}</small><Link className="text-button" href="/wishes">Use this style →</Link></span></article>)}</div>
-    </section>
-    <section className="card-preview"><div className="preview-copy"><span className="eyebrow">YOUR NEXT STEP</span><h2>Start with the words. Make them yours.</h2><p>Generate a personalized birthday wish first, then turn it into a polished greeting experience.</p><Link className="text-button" href="/#generator">Create with Wishora AI →</Link></div><div className="card-stack"><div className="mini-card back">✦</div><div className="mini-card front"><span>BirthdayWishora</span><strong>Happy<br/>Birthday.</strong><small>Made for your moment</small></div></div></section>
-    <footer className="footer"><div><Link className="logo" href="/"><span className="logo-mark">✦</span> BirthdayWishora</Link><p>Make Every Birthday Unforgettable.</p></div><div className="footer-links"><Link href="/wishes">Wishes</Link><Link href="/cards">Cards</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link></div><div className="footer-bottom">© {new Date().getFullYear()} BirthdayWishora. Made for moments that matter.</div></footer>
-  </main>;
-}
+import Link from "next/link"; import {SiteHeader,SiteFooter} from "@/components/site-shell";
+const cards=[["Elegant Bloom","Soft, elegant and perfect for Mom, Dad or someone special.","💐","Lavender"],["Midnight Celebration","A bold premium look for a birthday worth remembering.","✨","Midnight"],["Happy Confetti","Bright, playful and made for best friends and family.","🎉","Confetti"],["Love Note","Warm, romantic and made for a partner or someone special.","💖","Romance"],["Golden Moment","A refined celebration style for milestones and meaningful birthdays.","✦","Golden"],["Sweet Pastel","Soft, joyful and perfect for a simple heartfelt message.","🌸","Pastel"]];
+export default function CardsPage(){return <main className="page"><SiteHeader/><section className="cards-hero"><span className="eyebrow">✦ BIRTHDAY CARD STUDIO</span><h1>Make the wish.<br/><span>Make the moment.</span></h1><p>Pair beautiful birthday words with a polished visual style. Explore the collection, then create a message that feels made for them.</p><div><Link className="hero-button" href="/#generator">Start with a wish →</Link><Link className="hero-link" href="#collection">Explore collection</Link></div></section><section className="cards-section" id="collection"><div className="library-heading"><div><span className="eyebrow">THE COLLECTION</span><h2>Designed to feel special.</h2></div><span className="section-note">6 visual styles</span></div><div className="visual-card-grid">{cards.map(([title,desc,icon,theme],i)=><article className={`visual-card theme-${i}`} key={title}><div className="visual-card-art"><span>{icon}</span><small>BirthdayWishora</small><strong>{title}</strong></div><div className="visual-card-info"><span className="card-theme">{theme}</span><h3>{title}</h3><p>{desc}</p><Link href="/#generator">Create with this feeling →</Link></div></article>)}</div></section><section className="cards-process"><span className="eyebrow">HOW IT WORKS</span><h2>From words to a beautiful greeting.</h2><div className="process-grid"><div><b>01</b><h3>Create</h3><p>Generate or choose a birthday wish.</p></div><div><b>02</b><h3>Personalize</h3><p>Add the details that make it yours.</p></div><div><b>03</b><h3>Share</h3><p>Send your message to the people who matter.</p></div></div></section><SiteFooter/></main>}
