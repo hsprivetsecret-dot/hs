@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {createClient} from "@/lib/supabase/server";
-export const revalidate=60;
 export const metadata={title:"Birthday Wishes","description":"Browse birthday wishes by relationship and style — sweet, funny, emotional, romantic and more."};
 export default async function Wishes(){
  const supabase=await createClient();
