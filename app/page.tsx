@@ -3,9 +3,9 @@ import WishGenerator from "@/components/wish-generator";
 
 export default function Home() {
   return <main className="page">
-    <nav className="nav"><Link className="logo" href="/">🎂 Wishly</Link><Link href="/wishes">Explore Wishes</Link></nav>
+    <nav className="nav"><Link className="logo" href="/">🎂 BirthdayWishora</Link><Link href="/wishes">Explore Wishes</Link></nav>
     <section className="hero">
-      <div className="badge">✨ Make their birthday unforgettable</div>
+      <div className="badge">✨ Make every birthday unforgettable</div>
       <h1>Find the <span>perfect birthday wish.</span></h1>
       <p>Create a beautiful, personal birthday message in seconds — for anyone, anywhere in the world.</p>
       <WishGenerator />
