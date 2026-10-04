@@ -42,7 +42,7 @@ export default function Home() {
     </section>
 
     <section className="card-preview">
-      <div className="preview-copy"><span className="eyebrow">COMING TO BIRTHDAYWISHORA</span><h2>Beautiful birthday cards, made to share.</h2><p>Turn your favorite wish into a polished digital greeting card. Choose a style, personalize it and share the moment.</p><Link className="text-button" href="/wishes">Explore Birthday Cards →</Link></div>
+      <div className="preview-copy"><span className="eyebrow">BIRTHDAY CARD STUDIO</span><h2>Beautiful cards, made to share.</h2><p>Pair the right words with a polished visual style. Explore the collection, choose a look and make the greeting feel like yours.</p><Link className="text-button" href="/cards">Explore Birthday Cards →</Link></div>
       <div className="card-stack"><div className="mini-card back">✨</div><div className="mini-card front"><span>Happy Birthday</span><strong>Make today<br/>beautiful.</strong><small>BirthdayWishora</small></div></div>
     </section>
 
