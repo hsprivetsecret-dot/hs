@@ -6,21 +6,21 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
   title: {
-    default: "Wishly — Birthday Wishes & Personalized Messages",
-    template: "%s | Wishly",
+    default: "BirthdayWishora — Birthday Wishes & Personalized Messages",
+    template: "%s | BirthdayWishora",
   },
-  description: "Find beautiful birthday wishes for Mom, Dad, friends, partners, colleagues and more. Personalize, copy and share birthday messages in seconds.",
-  keywords: ["birthday wishes", "happy birthday wishes", "birthday messages", "birthday wishes for mom", "funny birthday wishes", "romantic birthday wishes"],
+  description: "BirthdayWishora helps you find, personalize and share the perfect birthday wish for anyone, anywhere in the world.",
+  keywords: ["birthday wishes", "happy birthday wishes", "birthday messages", "birthday wishes for mom", "funny birthday wishes", "romantic birthday wishes", "personalized birthday wishes"],
   alternates: siteUrl ? { canonical: siteUrl } : undefined,
   openGraph: {
-    title: "Wishly — Birthday Wishes & Personalized Messages",
+    title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
     description: "Find, personalize and share the perfect birthday message.",
     type: "website",
-    siteName: "Wishly",
+    siteName: "BirthdayWishora",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wishly — Birthday Wishes & Personalized Messages",
+    title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
     description: "Find, personalize and share the perfect birthday message.",
   },
 };
