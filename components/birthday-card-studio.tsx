@@ -118,17 +118,30 @@ export default function BirthdayCardStudio(){
   changeZoom(e.deltaY<0?5:-5);
  };
  const generateArtwork=async()=>{
-  const prompt=aiPrompt.trim();if(prompt.length<5){setNotice("Describe the artwork you want first.");return;}
-  setAiLoading(true);setNotice("");
+  const prompt=aiPrompt.trim();
+  if(prompt.length<5){setNotice("Describe the artwork you want first.");return;}
+  const supabaseUrl=process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const publishableKey=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if(!supabaseUrl||!publishableKey){setNotice("AI artwork is not configured on this deployment.");return;}
+  setAiLoading(true);setNotice("Connecting to Wishora AI…");
+  const controller=new AbortController();
+  const timeout=window.setTimeout(()=>controller.abort(),120000);
   try{
-   const supabaseUrl=process.env.NEXT_PUBLIC_SUPABASE_URL;
-   const publishableKey=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-   const response=await fetch(supabaseUrl+"/functions/v1/generate-birthday-art",{method:"POST",headers:{"Content-Type":"application/json",apikey:publishableKey||""},body:JSON.stringify({prompt,format:format.ratio})});
-   const data=await response.json();
-   if(!response.ok)throw new Error(data?.error||"AI artwork generation failed.");
+   const response=await fetch(supabaseUrl+"/functions/v1/generate-birthday-art?ts="+Date.now(),{
+    method:"POST",cache:"no-store",signal:controller.signal,
+    headers:{"Content-Type":"application/json",apikey:publishableKey,Authorization:"Bearer "+publishableKey},
+    body:JSON.stringify({prompt,format:format.ratio})
+   });
+   const raw=await response.text();
+   let data:any={};
+   try{data=raw?JSON.parse(raw):{};}catch{data={};}
+   if(!response.ok)throw new Error(data?.error||("AI artwork request failed ("+response.status+")."));
+   if(!data?.image||typeof data.image!=="string")throw new Error("AI returned no artwork. Please try again.");
    setAiArtwork(data.image);setNotice("AI artwork generated and applied to your live card.");setOverlay(10);
-  }catch(error){setNotice(error instanceof Error?error.message:"AI artwork generation failed.");}
-  finally{setAiLoading(false);}
+  }catch(error){
+   if(error instanceof DOMException&&error.name==="AbortError")setNotice("AI artwork took too long. Please try again with a simpler prompt.");
+   else setNotice(error instanceof Error?error.message:"AI artwork generation failed.");
+  }finally{window.clearTimeout(timeout);setAiLoading(false);}
  };
  const clearAi=()=>{setAiArtwork(null);setNotice("Back to the selected premium template.");};
  const download=()=>{const c=canvasRef.current;if(!c)return;const a=document.createElement("a");a.download="birthdaywishora-"+formatId+".png";a.href=c.toDataURL("image/png");a.click();setNotice("Your personalized image is ready.");};
