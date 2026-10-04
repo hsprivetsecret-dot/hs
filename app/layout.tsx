@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "BirthdayWishora",
   },
+  icons: { icon: "/icon.svg", shortcut: "/icon.svg", apple: "/icon.svg" },
   twitter: {
     card: "summary_large_image",
     title: "BirthdayWishora — Birthday Wishes & Personalized Messages",
