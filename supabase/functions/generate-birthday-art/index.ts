@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           model,
           input: finalPrompt,
-          response_format: { type: "image", mime_type: "image/png", aspect_ratio: aspectRatio, image_size: "1K" },
+          response_format: { type: "image", mime_type: "image/jpeg", aspect_ratio: aspectRatio, image_size: "1K" },
         }),
       });
       const data = await response.json();
@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
     if (!image) return json({ error: "Gemini returned no image data. Please try again." }, 502);
 
     const modelUsed = result.data?.model || "gemini-2.5-flash-image";
-    return json({ image: "data:image/png;base64," + image, model: modelUsed });
+    return json({ image: "data:image/jpeg;base64," + image, model: modelUsed });
   } catch (error) {
     console.error("Gemini image generation request failed", error);
     return json({ error: "Unable to reach Gemini right now. Please try again." }, 500);
