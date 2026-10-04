@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | BirthdayWishora",
   },
   description: "BirthdayWishora helps you find, personalize and share the perfect birthday wish for anyone, anywhere in the world.",
-  authors: [{ name: "Satpal Swami", email: "satpalswami22742@gmail.com" }],
+  authors: [{ name: "Satpal Swami" }],
   creator: "Satpal Swami",
   publisher: "BirthdayWishora",
   keywords: ["birthday wishes", "happy birthday wishes", "birthday messages", "birthday wishes for mom", "funny birthday wishes", "romantic birthday wishes", "personalized birthday wishes"],
