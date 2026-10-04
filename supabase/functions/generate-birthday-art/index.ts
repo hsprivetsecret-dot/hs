@@ -15,15 +15,22 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  const suppliedKey = req.headers.get("apikey");
+  const suppliedKey = req.headers.get("apikey") || req.headers.get("authorization")?.replace(/^Bearer\\s+/i, "") || "";
   const publishableRaw = Deno.env.get("SUPABASE_PUBLISHABLE_KEYS");
-  if (!suppliedKey || !publishableRaw) return json({ error: "Unauthorized request." }, 401);
-  try {
-    const publishableKeys = JSON.parse(publishableRaw);
-    if (!Object.values(publishableKeys).includes(suppliedKey)) return json({ error: "Unauthorized request." }, 401);
-  } catch {
-    return json({ error: "Function configuration error." }, 500);
+  const legacyAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!suppliedKey) return json({ error: "Unauthorized request." }, 401);
+  let validPublishableKey = false;
+  if (publishableRaw) {
+    try {
+      const parsed = JSON.parse(publishableRaw);
+      const values = Object.values(parsed).filter((value): value is string => typeof value === "string");
+      validPublishableKey = values.includes(suppliedKey);
+    } catch {
+      validPublishableKey = suppliedKey === publishableRaw;
+    }
   }
+  if (!validPublishableKey && legacyAnonKey) validPublishableKey = suppliedKey === legacyAnonKey;
+  if (!validPublishableKey) return json({ error: "Unauthorized request." }, 401);
 
   const geminiKey = Deno.env.get("GEMINI_API_KEY");
   if (!geminiKey) return json({ error: "AI image generation is not configured yet." }, 503);
