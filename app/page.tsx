@@ -5,6 +5,8 @@ import { useState } from "react";
 const categories = ["Mom","Dad","Best Friend","Sister","Brother","Partner","Colleague","Someone Special"];
 const styles = ["Sweet","Emotional","Funny","Romantic","Short & Simple","Heart-touching"];
 
+import WishGenerator from "@/components/wish-generator";
+
 export default function Home() {
   const [category,setCategory]=useState("Best Friend");
   const [style,setStyle]=useState("Sweet");
@@ -31,6 +33,6 @@ export default function Home() {
         <div><b>🌎 Global</b><p>Built for languages and cultures around the world.</p></div>
         <div><b>🎨 Beautiful cards</b><p>Turn your message into a shareable greeting.</p></div>
       </section>
-    </main>
+    <WishGenerator />\n    </main>
   );
 }
