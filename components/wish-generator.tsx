@@ -31,7 +31,7 @@ export default function WishGenerator(){
       if(!pick){setError("We don't have that exact combination yet. Try another style or relationship.");setResult(null);return;}
       let content=pick.content;
       if(name.trim()) content=`Happy birthday, ${name.trim()}! ${content.replace(/^happy birthday[^.!]*[.!]?\s*/i,"").trim()}`;
-      if(age.trim()) content+=` Wishing you an amazing ${age.trim()}rd year filled with happiness and unforgettable moments.`;
+      if(age.trim()){const n=Number(age.trim());const suffix=n%100>=11&&n%100<=13?"th":n%10===1?"st":n%10===2?"nd":n%10===3?"rd":"th";content+=` Wishing you an amazing ${age.trim()}${suffix} year filled with happiness and unforgettable moments.`;} 
       if(memory.trim()) content+=` I’ll always cherish ${memory.trim()}.`;
       setResult({...pick,content});
     }catch{setError("Something went wrong. Please try again.");}finally{setLoading(false);}
