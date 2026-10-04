@@ -50,25 +50,40 @@ Deno.serve(async (req) => {
 
   try {
     const aspectRatio = format === "9:16" ? "9:16" : format === "1:1" ? "1:1" : format === "16:10" ? "16:9" : "3:4";
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
-      method: "POST",
-      headers: { "x-goog-api-key": geminiKey, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "gemini-3.1-flash-image",
-        input: [{ type: "text", text: finalPrompt }],
-        response_format: { type: "image", mime_type: "image/png", aspect_ratio: aspectRatio, image_size: "1K" },
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      console.error("Gemini image generation error", response.status, data);
-      return json({ error: data?.error?.message || "Image generation failed." }, 502);
+    const callGemini = async (model: string) => {
+      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+        method: "POST",
+        headers: { "x-goog-api-key": geminiKey, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model,
+          input: finalPrompt,
+          response_format: { type: "image", mime_type: "image/png", aspect_ratio: aspectRatio, image_size: "1K" },
+        }),
+      });
+      const data = await response.json();
+      return { response, data };
+    };
+
+    let result = await callGemini("gemini-3.1-flash-image");
+    if (!result.response.ok) {
+      console.error("Gemini 3.1 image generation error", result.response.status, result.data);
+      result = await callGemini("gemini-2.5-flash-image");
     }
-    const image = data?.output_image?.data ?? data?.steps?.find((step: any) => step?.type === "model_output")?.content?.find((block: any) => block?.type === "image")?.data;
-    if (!image) return json({ error: "No image was returned." }, 502);
-    return json({ image: `data:image/png;base64,${image}`, model: "gemini-3.1-flash-image" });
+
+    if (!result.response.ok) {
+      console.error("Gemini image generation failed", result.response.status, result.data);
+      const message = result.data?.error?.message || "Gemini could not generate the artwork.";
+      return json({ error: "Gemini API error (" + result.response.status + "): " + message }, 502);
+    }
+
+    const image = result.data?.output_image?.data ??
+      result.data?.steps?.find((step: any) => step?.type === "model_output")?.content?.find((block: any) => block?.type === "image")?.data;
+    if (!image) return json({ error: "Gemini returned no image data. Please try again." }, 502);
+
+    const modelUsed = result.data?.model || "gemini-2.5-flash-image";
+    return json({ image: "data:image/png;base64," + image, model: modelUsed });
   } catch (error) {
     console.error("Gemini image generation request failed", error);
-    return json({ error: "Unable to generate the artwork right now." }, 500);
+    return json({ error: "Unable to reach Gemini right now. Please try again." }, 500);
   }
 });
