@@ -73,6 +73,22 @@ export default function Home() {
       <div className="relationship-grid">{relationships.map(([label,href,icon,desc])=><Link className="relationship-card" key={href} href={href}><span className="category-icon">{icon}</span><span><b>{label}</b><small>{desc}</small></span><span className="arrow">↗</span></Link>)}</div>
     </section>
 
+    <section className="surprise-home-section">
+      <div className="surprise-home-copy">
+        <span className="eyebrow">✦ CREATE A BIRTHDAY SURPRISE</span>
+        <h2>Don’t just send a wish.<br/><span>Create a moment.</span></h2>
+        <p>Build a personalized birthday surprise with a secret message, thoughtful 3-step plan, gift idea and a fun reveal — all in one polished experience.</p>
+        <div className="surprise-home-points"><span>🔐 Secret message reveal</span><span>🎁 Personalized surprise plan</span><span>🧠 Mini birthday game</span></div>
+        <Link className="hero-button inline-button" href="/surprise">Create a Birthday Surprise →</Link>
+      </div>
+      <div className="surprise-home-visual">
+        <div className="surprise-orbit orbit-a"/><div className="surprise-orbit orbit-b"/>
+        <div className="surprise-card-preview">
+          <span>FOR SOMEONE SPECIAL</span><b>A little surprise<br/>just for you.</b><small>✦ Secret message unlocked</small>
+        </div>
+      </div>
+    </section>
+
     <section className="language-section">
       <div className="language-copy"><span className="eyebrow">CELEBRATE YOUR WAY</span><h2>Birthday wishes in your language.</h2><p>Say it naturally. Share it confidently. BirthdayWishora is built for celebrations across cultures and languages.</p></div>
       <div className="language-grid">{languages.map(([label,href])=><Link key={label} href={href} className="language-pill"><span>✦</span>{label}</Link>)}</div>
@@ -106,7 +122,10 @@ export default function Home() {
       <div className="seo-grid">{seoLinks.map(([label,href])=><Link key={href} href={href}>{label}<span>→</span></Link>)}</div>
     </section>
 
-    <FAQSection items={homeFaqs} />\n    <JsonLd data={{"@context":"https://schema.org","@type":"WebPage",name:"BirthdayWishora Birthday Wishes",description:"Personalized birthday wishes and cards for everyone."}} />\n\n    <section className="final-cta">
+    <FAQSection items={homeFaqs} />
+    <JsonLd data={{"@context":"https://schema.org","@type":"WebPage",name:"BirthdayWishora Birthday Wishes",description:"Personalized birthday wishes and cards for everyone."}} />
+
+    <section className="final-cta">
       <span className="eyebrow">YOUR NEXT BIRTHDAY DESERVES BETTER WORDS</span>
       <h2>Make their day unforgettable.</h2>
       <p>Personal, beautiful and ready to share in seconds.</p>
@@ -115,7 +134,7 @@ export default function Home() {
 
     <footer className="footer">
       <div className="footer-brand"><Link className="logo" href="/"><span className="logo-mark">✦</span> BirthdayWishora</Link><p>Make Every Birthday Unforgettable.</p><small>Personal birthday wishes, cards and greetings for people everywhere.</small></div>
-      <div><b className="footer-title">Explore</b><div className="footer-links"><Link href="/wishes">Wish Library</Link><Link href="/cards">Birthday Cards</Link><Link href="/about">About</Link></div></div>
+      <div><b className="footer-title">Explore</b><div className="footer-links"><Link href="/wishes">Wish Library</Link><Link href="/cards">Birthday Cards</Link><Link href="/surprise">Birthday Surprise</Link><Link href="/about">About</Link></div></div>
       <div><b className="footer-title">Popular</b><div className="footer-links"><Link href="/wishes/mom">For Mom</Link><Link href="/wishes/dad">For Dad</Link><Link href="/wishes/partner/romantic">Romantic</Link><Link href="/wishes/best-friend/funny">Funny</Link></div></div>
       <div><b className="footer-title">Company</b><div className="footer-links"><Link href="/contact">Contact</Link><Link href="/our-story">Our Story</Link><Link href="/privacy-policy">Privacy</Link><Link href="/terms-and-conditions">Terms</Link><Link href="/contact">Contact Us</Link><a href="mailto:satpalswami22742@gmail.com">Email us</a></div></div>
       <div className="footer-bottom">© {new Date().getFullYear()} BirthdayWishora. Made for moments that matter. Created by Satpal Swami. <span>♥</span></div>
